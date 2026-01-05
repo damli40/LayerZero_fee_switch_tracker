@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { createChart, IChartApi, ISeriesApi, LineData, Time } from 'lightweight-charts';
+import { createChart, IChartApi, ISeriesApi, LineData, Time, LineSeries } from 'lightweight-charts';
 
 interface PriceData {
   date: string;
@@ -93,7 +93,7 @@ export function TradingViewPriceChart({ data, title, description }: TradingViewP
     chartRef.current = chart;
 
     // Create line series
-    const lineSeries = chart.addSeries('Line' as any, {
+    const lineSeries = chart.addSeries(LineSeries, {
       color: 'rgba(255, 255, 255, 0.9)',
       lineWidth: 2,
       crosshairMarkerVisible: true,
