@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(timeout /t 6 /nobreak)",
+      "Bash(curl:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(timeout /t 5 /nobreak)",
+      "Bash(if exist datashadow-burn.db del /f datashadow-burn.db)",
+      "Bash(BASE_URL=http://localhost:3004 npm run db:sync:*)",
+      "WebSearch",
+      "Bash(python:*)",
+      "Bash(node:*)",
+      "Bash(npx tsc:*)",
+      "Bash(grep:*)",
+      "Bash(if exist .next rd /s /q .next)",
+      "Bash(if exist node_modules.cache rd /s /q node_modules.cache)",
+      "Bash(if exist .next rmdir /s /q .next)",
+      "Bash(timeout /t 10 /nobreak)",
+      "Bash(awk:*)",
+      "Bash(npm run build:*)",
+      "Bash(sqlite3:*)"
+    ]
+  }
+}
