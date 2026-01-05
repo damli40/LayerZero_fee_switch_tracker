@@ -21,7 +21,12 @@
       "Bash(awk:*)",
       "Bash(npm run build:*)",
       "Bash(sqlite3:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(powershell -Command \"$body = @{ startDate = ''2024-12-27''; endDate = ''2026-01-05''; force = $true } | ConvertTo-Json; Invoke-RestMethod -Uri ''https://layer-zero-fee-switch-tracker.vercel.app/api/admin/sync'' -Method POST -ContentType ''application/json'' -Body $body\")",
+      "Bash(powershell -Command \"Invoke-RestMethod -Uri ''https://layer-zero-fee-switch-tracker.vercel.app/api/admin/sync'' -Method POST -ContentType ''application/json'' -Body ''{\"\"startDate\"\": \"\"2024-12-27\"\", \"\"endDate\"\": \"\"2026-01-05\"\", \"\"force\"\": true}''\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

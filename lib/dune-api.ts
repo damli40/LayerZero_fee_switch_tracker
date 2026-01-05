@@ -81,7 +81,7 @@ async function executeDuneQuery(sql: string): Promise<string> {
 /**
  * Poll Dune API for query results
  */
-async function pollDuneResults(executionId: string, maxAttempts = 60): Promise<DuneResultsResponse> {
+async function pollDuneResults(executionId: string, maxAttempts = 180): Promise<DuneResultsResponse> {
   const apiKey = process.env.DUNE_API_KEY;
 
   if (!apiKey) {
