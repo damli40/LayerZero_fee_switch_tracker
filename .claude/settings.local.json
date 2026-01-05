@@ -30,7 +30,11 @@
       "Bash(timeout /t 120 /nobreak)",
       "Bash(powershell -Command \"Start-Sleep -Seconds 60; Write-Host ''Waiting for Vercel deployment to complete...''\")",
       "Bash(powershell -Command \"Invoke-RestMethod -Uri ''https://layer-zero-fee-switch-tracker.vercel.app/api/admin/sync'' -Method POST -ContentType ''application/json'' -Body ''{\"\"startDate\"\": \"\"2024-12-27\"\", \"\"endDate\"\": \"\"2026-01-05\"\", \"\"force\"\": true}'' -TimeoutSec 420\")",
-      "Bash(powershell -Command \"Start-Sleep -Seconds 90; Write-Host ''Waiting for Vercel deployment...''\")"
+      "Bash(powershell -Command \"Start-Sleep -Seconds 90; Write-Host ''Waiting for Vercel deployment...''\")",
+      "Bash(powershell -Command \"Start-Sleep -Seconds 90; Write-Host ''Deployment complete''\")",
+      "Bash(powershell -Command \"$csv = Get-Content -Path ''zro_shadow_burn_data.csv'' -Raw; $body = @{csvData = $csv} | ConvertTo-Json; Invoke-RestMethod -Uri ''https://layer-zero-fee-switch-tracker.vercel.app/api/admin/update-prices'' -Method POST -ContentType ''application/json'' -Body $body\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File update-prices.ps1)",
+      "Bash(powershell -Command \"Start-Sleep -Seconds 90; Write-Host ''Deployment ready''\")"
     ]
   }
 }

@@ -13,6 +13,7 @@ import { calculateTotalBurn, calculateTotalUSDValue, getDailyBurnBreakdown } fro
 import { predictFutureBurn, getRegressionTrendInfo } from '@/lib/prediction';
 import { fetchMetricsFromAPI } from '@/lib/api-client';
 import { VOTE_PERIODS, getVotePeriod, getLatestVotePeriod, getDaysSinceVote, type VotePeriod } from '@/lib/vote-config';
+import { TradingViewPriceChart } from '@/components/tradingview-price-chart';
 
 const DAYS_TO_FETCH = 60;
 
@@ -160,19 +161,19 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black p-4 md:p-8">
+    <main className="min-h-screen bg-black p-3 sm:p-4 md:p-8">
       <div
-        className={`max-w-7xl mx-auto space-y-6 transition-opacity duration-300 ${
+        className={`max-w-7xl mx-auto space-y-4 sm:space-y-6 transition-opacity duration-300 ${
           isTransitioning ? 'opacity-90' : 'opacity-100'
         }`}
       >
         {/* Hero Section - Massive Revenue Impact */}
-        <div className="relative overflow-hidden py-12 md:py-20">
-          <div className="relative z-10 text-center space-y-6">
-            <p className="text-white/40 text-xs md:text-sm font-light tracking-[0.2em] uppercase">
+        <div className="relative overflow-hidden py-8 sm:py-12 md:py-20">
+          <div className="relative z-10 text-center space-y-3 sm:space-y-6">
+            <p className="text-white/40 text-[10px] sm:text-xs md:text-sm font-light tracking-[0.15em] sm:tracking-[0.2em] uppercase">
               MISSED PROTOCOL REVENUE
             </p>
-            <h1 className="text-7xl md:text-8xl lg:text-9xl font-extralight text-white leading-none tracking-wider">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight text-white leading-none tracking-wider px-2">
               <AnimatedNumber
                 key={`hero-${selectedVote.voteNumber}`}
                 value={retrospectiveUSDValue}
@@ -183,8 +184,8 @@ export default function DashboardPage() {
                 className=""
               />
             </h1>
-            <div className="flex items-center justify-center gap-8 pt-2">
-              <div className="text-white/50 text-sm font-light">
+            <div className="flex items-center justify-center gap-4 sm:gap-8 pt-2 text-xs sm:text-sm">
+              <div className="text-white/50 font-light">
                 <AnimatedNumber
                   key={`days-${selectedVote.voteNumber}`}
                   value={daysSinceVote}
@@ -193,8 +194,8 @@ export default function DashboardPage() {
                   suffix=" days"
                 />
               </div>
-              <div className="h-4 w-px bg-white/20"></div>
-              <div className="text-white/50 text-sm font-light">
+              <div className="h-3 sm:h-4 w-px bg-white/20"></div>
+              <div className="text-white/50 font-light">
                 <AnimatedNumber
                   key={`burn-${selectedVote.voteNumber}`}
                   value={retrospectiveBurn}
@@ -209,16 +210,16 @@ export default function DashboardPage() {
         </div>
 
         {/* Vote Period Selector */}
-        <div className="flex items-center justify-between p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-          <div className="flex items-center space-x-3">
-            <Vote className="h-5 w-5 text-white/60" />
-            <Label htmlFor="vote-selector" className="text-base font-medium text-white">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 p-4 sm:p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <Vote className="h-4 w-4 sm:h-5 sm:w-5 text-white/60" />
+            <Label htmlFor="vote-selector" className="text-sm sm:text-base font-medium text-white">
               Fee Switch Vote Period:
             </Label>
           </div>
           <select
             id="vote-selector"
-            className="px-6 py-3 border border-white/20 rounded-xl bg-white/10 text-white font-medium
+            className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 border border-white/20 rounded-xl bg-white/10 text-white text-sm sm:text-base font-medium
                        hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/40
                        transition-all cursor-pointer shadow-lg shadow-white/10"
             value={selectedVote.voteNumber}
@@ -233,12 +234,12 @@ export default function DashboardPage() {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-            <p className="text-sm font-medium text-white/60 uppercase tracking-wide mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-4 sm:p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
+            <p className="text-xs sm:text-sm font-medium text-white/60 uppercase tracking-wide mb-1 sm:mb-2">
               Total Messages
             </p>
-            <div className="text-4xl font-bold text-white mb-1">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
               <AnimatedNumber
                 key={`messages-${selectedVote.voteNumber}`}
                 value={retrospectiveMetrics.reduce((sum, m) => sum + m.messageCount, 0)}
@@ -247,16 +248,16 @@ export default function DashboardPage() {
                 separator={true}
               />
             </div>
-            <p className="text-xs text-white/40">
+            <p className="text-[10px] sm:text-xs text-white/40">
               Since {new Date(selectedVote.dataStartDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
 
-          <div className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-            <p className="text-sm font-medium text-white/60 uppercase tracking-wide mb-2">
+          <div className="p-4 sm:p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
+            <p className="text-xs sm:text-sm font-medium text-white/60 uppercase tracking-wide mb-1 sm:mb-2">
               Total Cumulative Fees
             </p>
-            <div className="text-4xl font-bold text-white mb-1">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
               <AnimatedNumber
                 key={`totalfee-${selectedVote.voteNumber}`}
                 value={retrospectiveUSDValue}
@@ -266,16 +267,16 @@ export default function DashboardPage() {
                 separator={true}
               />
             </div>
-            <p className="text-xs text-white/40">
+            <p className="text-[10px] sm:text-xs text-white/40">
               Total fees collected
             </p>
           </div>
 
-          <div className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-            <p className="text-sm font-medium text-white/60 uppercase tracking-wide mb-2">
+          <div className="p-4 sm:p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
+            <p className="text-xs sm:text-sm font-medium text-white/60 uppercase tracking-wide mb-1 sm:mb-2">
               Current ZRO Price
             </p>
-            <div className="text-4xl font-bold text-white mb-1">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
               <AnimatedNumber
                 key={`price-${selectedVote.voteNumber}`}
                 value={marketData.zroPrice}
@@ -284,17 +285,17 @@ export default function DashboardPage() {
                 prefix="$"
               />
             </div>
-            <p className="text-xs text-white/40 flex items-center gap-1">
-              <span className="inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>
+            <p className="text-[10px] sm:text-xs text-white/40 flex items-center gap-1">
+              <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></span>
               Live from CoinGecko
             </p>
           </div>
 
-          <div className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-            <p className="text-sm font-medium text-white/60 uppercase tracking-wide mb-2">
-              Hypothetical Avg Cost per $ZRO
+          <div className="p-4 sm:p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
+            <p className="text-xs sm:text-sm font-medium text-white/60 uppercase tracking-wide mb-1 sm:mb-2">
+              Avg Cost per $ZRO
             </p>
-            <div className="text-4xl font-bold text-white mb-1">
+            <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1">
               <AnimatedNumber
                 key={`avgcost-${selectedVote.voteNumber}`}
                 value={retrospectiveBurn > 0 ? retrospectiveUSDValue / retrospectiveBurn : 0}
@@ -303,23 +304,23 @@ export default function DashboardPage() {
                 prefix="$"
               />
             </div>
-            <p className="text-xs text-white/40">
+            <p className="text-[10px] sm:text-xs text-white/40">
               Revenue per ZRO burned
             </p>
           </div>
         </div>
 
         {/* Charts Section */}
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {/* Cumulative Burn Chart */}
-          <div className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-            <div className="mb-6">
-              <h3 className="text-xl font-bold text-white mb-2">Cumulative Missed Burn Over Time</h3>
-              <p className="text-sm text-white/60">
+          <div className="p-4 sm:p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">Cumulative Missed Burn Over Time</h3>
+              <p className="text-xs sm:text-sm text-white/60">
                 Daily accumulation of missed ZRO burns since {new Date(selectedVote.dataStartDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} (using historical ZRO prices)
               </p>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <AreaChart data={retrospectiveChartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis dataKey="date" stroke="rgba(255,255,255,0.6)" style={{ fontSize: '12px' }} />
@@ -345,14 +346,14 @@ export default function DashboardPage() {
           </div>
 
           {/* Daily Metrics Chart */}
-          <div className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-            <div className="mb-6">
-              <h3 className="text-xl font-bold text-white mb-2">Daily Message Volume & Burn</h3>
-              <p className="text-sm text-white/60">
+          <div className="p-4 sm:p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">Daily Message Volume & Burn</h3>
+              <p className="text-xs sm:text-sm text-white/60">
                 Historical message count and corresponding daily burn amounts (calculated with actual ZRO price per day)
               </p>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <LineChart data={retrospectiveChartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis dataKey="date" stroke="rgba(255,255,255,0.6)" style={{ fontSize: '12px' }} />
@@ -386,36 +387,15 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </div>
 
-          {/* ZRO Price History Chart */}
-          <div className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-lg shadow-white/5">
-            <div className="mb-6">
-              <h3 className="text-xl font-bold text-white mb-2">Historical ZRO Price</h3>
-              <p className="text-sm text-white/60">
-                ZRO token price movement over the retrospective period
-              </p>
-            </div>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={retrospectiveChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                <XAxis dataKey="date" stroke="rgba(255,255,255,0.6)" style={{ fontSize: '12px' }} />
-                <YAxis domain={['auto', 'auto']} stroke="rgba(255,255,255,0.6)" style={{ fontSize: '12px' }} />
-                <Tooltip
-                  formatter={(value: number) => `$${value.toFixed(2)}`}
-                  contentStyle={{ backgroundColor: 'rgba(0,0,0,0.9)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px' }}
-                  labelStyle={{ color: 'rgba(255,255,255,0.8)' }}
-                />
-                <Legend wrapperStyle={{ color: 'rgba(255,255,255,0.8)' }} />
-                <Line
-                  type="monotone"
-                  dataKey="zroPrice"
-                  stroke="rgba(255,255,255,0.8)"
-                  name="ZRO Price (USD)"
-                  strokeWidth={2}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+          {/* ZRO Price History Chart - TradingView */}
+          <TradingViewPriceChart
+            data={retrospectiveChartData.map(d => ({
+              date: new Date(d.date).toISOString().split('T')[0],
+              price: d.zroPrice
+            }))}
+            title="Historical ZRO Price"
+            description="ZRO token price movement with interactive chart (hover for details)"
+          />
         </div>
 
         {/* Predictive Section */}
