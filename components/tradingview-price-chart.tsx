@@ -26,7 +26,10 @@ export function TradingViewPriceChart({ data, title, description }: TradingViewP
   const getFilteredData = (): PriceData[] => {
     if (selectedPeriod === 'ALL' || data.length === 0) return data;
 
-    const now = new Date();
+    // Find the latest date in the dataset
+    const sortedData = [...data].sort((a, b) => b.date.localeCompare(a.date));
+    const latestDate = new Date(sortedData[0].date);
+
     const daysMap: Record<TimePeriod, number> = {
       '7D': 7,
       '1M': 30,
@@ -35,7 +38,7 @@ export function TradingViewPriceChart({ data, title, description }: TradingViewP
     };
 
     const days = daysMap[selectedPeriod];
-    const cutoffDate = new Date(now);
+    const cutoffDate = new Date(latestDate);
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
     return data.filter(d => new Date(d.date) >= cutoffDate);
@@ -138,20 +141,28 @@ export function TradingViewPriceChart({ data, title, description }: TradingViewP
 
     const filteredData = getFilteredData();
 
-    // Convert to TradingView format
+    if (filteredData.length === 0) {
+      // If no data after filtering, clear the chart
+      seriesRef.current.setData([]);
+      return;
+    }
+
+    // Convert to TradingView format - use date string directly for daily data
     const chartData: LineData[] = filteredData.map(d => ({
-      time: (new Date(d.date).getTime() / 1000) as Time,
+      time: d.date as Time, // Use date string 'YYYY-MM-DD' format
       value: d.price,
     }));
 
-    // Sort by time
-    chartData.sort((a, b) => Number(a.time) - Number(b.time));
+    // Sort by time (date string comparison works for YYYY-MM-DD format)
+    chartData.sort((a, b) => (a.time > b.time ? 1 : a.time < b.time ? -1 : 0));
 
     seriesRef.current.setData(chartData);
 
-    // Fit content
+    // Fit content with a small delay to ensure proper rendering
     if (chartRef.current) {
-      chartRef.current.timeScale().fitContent();
+      setTimeout(() => {
+        chartRef.current?.timeScale().fitContent();
+      }, 0);
     }
   }, [data, selectedPeriod]);
 
