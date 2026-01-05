@@ -20,7 +20,8 @@
       "Bash(timeout /t 10 /nobreak)",
       "Bash(awk:*)",
       "Bash(npm run build:*)",
-      "Bash(sqlite3:*)"
+      "Bash(sqlite3:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

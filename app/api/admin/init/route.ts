@@ -3,15 +3,29 @@
  * POST /api/admin/init
  *
  * This route performs the initial data population from Dec 20, 2024 to present
+ * For Postgres (production): Creates schema first, then syncs data
+ * For SQLite (local): Schema auto-created, just syncs data
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { hasData } from '@/lib/db/queries';
+import { isUsingPostgres, initializePostgresSchema } from '@/lib/db/index';
 
 export async function POST(request: NextRequest) {
   try {
+    // Step 1: Initialize schema for Postgres (if needed)
+    if (isUsingPostgres()) {
+      console.log('[Init] Initializing Postgres schema...');
+      try {
+        await initializePostgresSchema();
+        console.log('[Init] Postgres schema initialized successfully');
+      } catch (error) {
+        console.error('[Init] Error initializing Postgres schema:', error);
+        // Continue anyway - tables might already exist
+      }
+    }
 
-    // Check if already initialized
+    // Step 2: Check if already has data
     if (await hasData()) {
       return NextResponse.json(
         {
@@ -68,12 +82,14 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const initialized = await hasData();
+    const dbType = isUsingPostgres() ? 'postgres' : 'sqlite';
 
     return NextResponse.json({
       initialized,
+      databaseType: dbType,
       message: initialized
-        ? 'Database is initialized'
-        : 'Database needs initialization',
+        ? `Database is initialized (${dbType})`
+        : `Database needs initialization (${dbType})`,
     });
   } catch (error) {
     console.error('Error checking initialization:', error);
