@@ -169,8 +169,8 @@ export async function fetchDuneDailyMetrics(
 
   results.result.rows.forEach((row) => {
     // Extract date from timestamp
-    // Dune returns dates like "2025-12-27 00:00:00.000 UTC"
-    const date = row.date.split(' ')[0]; // Extract '2025-12-27' from date string
+    // Dune returns dates like "2024-12-27 00:00:00.000 UTC"
+    const date = row.date.split(' ')[0]; // Extract '2024-12-27' from date string
 
     const totalProtocolFee = row.total_executor_fees + row.total_dvn_fees;
 

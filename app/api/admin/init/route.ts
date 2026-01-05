@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        startDate: '2025-12-27',
+        startDate: '2024-12-27',
         endDate: new Date().toISOString().split('T')[0],
         force: true,
       }),

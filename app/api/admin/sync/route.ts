@@ -25,13 +25,13 @@ export async function POST(request: NextRequest) {
       fromDate = new Date(startDate);
       toDate = new Date(endDate);
     } else {
-      // Auto: sync from last sync date or Dec 27, 2025
+      // Auto: sync from last sync date or Dec 27, 2024
       const lastSync = await getLastSyncStatus();
       if (lastSync && !force) {
         fromDate = new Date(lastSync.last_sync_date);
         fromDate.setDate(fromDate.getDate() + 1); // Start from next day
       } else {
-        fromDate = new Date('2025-12-27'); // Fee switch vote date
+        fromDate = new Date('2024-12-27'); // Fee switch vote date (Dec 27, 2024)
       }
     }
 
