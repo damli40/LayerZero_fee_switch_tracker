@@ -13,19 +13,42 @@ import path from 'path';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('[UpdatePrices] Starting price update from CSV...');
+    console.log('[UpdatePrices] Starting price update...');
 
-    // Read CSV file
-    const csvPath = path.join(process.cwd(), 'zro_shadow_burn_data.csv');
+    // Try to get CSV from request body first
+    let csvContent: string;
 
-    if (!fs.existsSync(csvPath)) {
-      return NextResponse.json(
-        { error: 'CSV file not found: zro_shadow_burn_data.csv' },
-        { status: 404 }
-      );
+    try {
+      const body = await request.json();
+      csvContent = body.csvData;
+
+      if (!csvContent) {
+        // Fallback: try to read from local file (for local dev)
+        const csvPath = path.join(process.cwd(), 'zro_shadow_burn_data.csv');
+
+        if (fs.existsSync(csvPath)) {
+          csvContent = fs.readFileSync(csvPath, 'utf-8');
+        } else {
+          return NextResponse.json(
+            { error: 'No CSV data provided and file not found' },
+            { status: 400 }
+          );
+        }
+      }
+    } catch {
+      // If JSON parsing fails, try to read from file
+      const csvPath = path.join(process.cwd(), 'zro_shadow_burn_data.csv');
+
+      if (fs.existsSync(csvPath)) {
+        csvContent = fs.readFileSync(csvPath, 'utf-8');
+      } else {
+        return NextResponse.json(
+          { error: 'No CSV data provided and file not found' },
+          { status: 400 }
+        );
+      }
     }
 
-    const csvContent = fs.readFileSync(csvPath, 'utf-8');
     const lines = csvContent.split('\n');
 
     // Skip header
